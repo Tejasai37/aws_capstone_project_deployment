@@ -1,4 +1,5 @@
-# Hello I am Teja this is a sample templete code for AWS Capstone roject
+# Hello I am Teja this is a sample templete code for AWS Capstone project
+# Hello again
 
 from flask import Flask, render_template, request, redirect, url_for, session
 
