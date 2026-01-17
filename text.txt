@@ -1,0 +1,11 @@
+Python dic
+
+{
+    key: value
+}
+
+
+{
+    username:"test"
+    password:"123456789"
+}

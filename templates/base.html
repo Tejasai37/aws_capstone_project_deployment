@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AWS Capstone Project{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">AWS Capstone</div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            {% if session.get('username') %}
+            <a href="{{ url_for('home') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% elif session.get('admin') %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin Pannel</a>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Signup</a>
+            <a href="{{ url_for('admin_login') }}" class="admin-link">Admin Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 AWS Capstone Project. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

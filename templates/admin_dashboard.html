@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - AWS Capstone Project{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome Admin, {{ username }}!</h1>
+    <p>This is your administrative dashboard.</p>
+    <p>You can manage projects and view enrolled students here.</p>
+
+    <div style="margin-top: 2rem;">
+        <button onclick="alert('Feature coming soon!')">Manage Projects</button>
+        <button onclick="alert('Feature coming soon!')" style="background-color: var(--secondary-color);">View
+            Students</button>
+    </div>
+
+    <a href="{{ url_for('admin_logout') }}"><button style="background-color: #dc3545; margin-top: 2rem;">Admin
+            Logout</button></a>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - AWS Capstone Project{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>AWS Capstone Project Deployment</h1>
+    <p>Empowering students to build and deploy cloud-native applications.</p>
+    {% if not session.get('username') and not session.get('admin') %}
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('login') }}"><button>App Login</button></a>
+        <a href="{{ url_for('signup') }}" style="margin-left: 1rem;"><button
+                style="background-color: var(--secondary-color);">App Signup</button></a>
+    </div>
+    {% endif %}
+</div>
+
+<section class="features">
+    <div class="feature-card">
+        <h3>About the Project</h3>
+        <p>This platform allows students to enroll in AWS projects built with Python (Flask), HTML, CSS, and JS.</p>
+    </div>
+    <div class="feature-card">
+        <h3>AWS Services</h3>
+        <p>We leverage key AWS services to build robust applications:</p>
+        <ul style="text-align: left; padding-left: 1.5rem;">
+            <li><strong>EC2:</strong> For application deployment.</li>
+            <li><strong>DynamoDB:</strong> NoSQL database for data storage.</li>
+            <li><strong>SNS:</strong> For activity notifications.</li>
+            <li><strong>IAM:</strong> For secure code access from GitHub.</li>
+        </ul>
+    </div>
+    <div class="feature-card">
+        <h3>Student Enrollment</h3>
+        <p>Easy enrollment process for students to get started with their cloud journey.</p>
+    </div>
+</section>
+{% endblock %}
