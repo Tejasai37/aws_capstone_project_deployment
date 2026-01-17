@@ -1,3 +1,5 @@
+# Hello I am Teja this is a sample templete code for AWS Capstone roject
+
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
