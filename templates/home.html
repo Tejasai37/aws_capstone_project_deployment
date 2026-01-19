@@ -4,9 +4,46 @@
 
 {% block content %}
 <div class="container">
-    <h1>Hello, {{ username }}!</h1>
-    <p>Welcome to your student dashboard.</p>
-    <p>Here you can manage your project enrollments and view status.</p>
-    <a href="{{ url_for('logout') }}"><button style="background-color: #dc3545; margin-top: 1rem;">Logout</button></a>
+    <div class="page-header">
+        <h1>My Dashboard</h1>
+        <div>
+            <a href="{{ url_for('projects_list') }}" class="btn btn-primary">Browse All Projects</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+
+    <p class="mb-4">Welcome, {{ username }}!</p>
+
+    <h3>My Enrollments</h3>
+    <div class="grid mt-2">
+        {% for project in my_projects %}
+        <div class="card">
+            <div style="margin-bottom: 10px;">
+                <span class="badge badge-success">Enrolled</span>
+            </div>
+
+            {% if project.image %}
+            <img src="{{ url_for('static', filename='uploads/' + project.image) }}" alt="{{ project.title }}"
+                class="card-img">
+            {% endif %}
+
+            <div class="card-body">
+                <h4 class="card-title">{{ project.title }}</h4>
+            </div>
+
+            <div class="card-footer">
+                {% if project.document %}
+                <a href="{{ url_for('static', filename='uploads/' + project.document) }}" target="_blank"
+                    class="btn btn-sm btn-outline-info w-100">View Document</a>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-warning w-100">
+            You haven't enrolled in any projects yet.
+            <a href="{{ url_for('projects_list') }}">Browse Projects</a> to get started.
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

@@ -3,13 +3,24 @@
 # I am testing git push and pull
 
 from flask import Flask, render_template, request, redirect, url_for, session
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
+# Configuration for File Uploads
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Ensure upload directory exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 # In-memory database (dictionary)
 users = {}
 admin_users = {}
+projects = []  # List of dictionaries: {'id': 1, 'title': '...', 'desc': '...', 'image': '...', 'doc': '...'}
+enrollments = {} # Dictionary: {'username': [project_id_1, project_id_2]}
 
 @app.route('/')
 def index():
@@ -49,8 +60,39 @@ def login():
 @app.route('/home')
 def home():
     if 'username' in session:
-        return render_template('home.html', username=session['username'])
+        username = session['username']
+        user_enrollments_ids = enrollments.get(username, [])
+        
+        # Filter projects to get full details of enrolled ones
+        my_projects = [p for p in projects if p['id'] in user_enrollments_ids]
+        
+        return render_template('home.html', username=username, my_projects=my_projects)
     return redirect(url_for('login'))
+
+@app.route('/projects')
+def projects_list():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+        
+    username = session['username']
+    user_enrollments_ids = enrollments.get(username, [])
+    
+    return render_template('projects_list.html', projects=projects, user_enrollments=user_enrollments_ids)
+
+@app.route('/enroll/<int:project_id>')
+def enroll(project_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+        
+    username = session['username']
+    
+    if username not in enrollments:
+        enrollments[username] = []
+        
+    if project_id not in enrollments[username]:
+        enrollments[username].append(project_id)
+        
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
@@ -85,9 +127,51 @@ def admin_login():
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
-    if 'admin' in session:
-        return render_template('admin_dashboard.html', username=session['admin'])
-    return redirect(url_for('admin_login'))
+    if 'admin' not in session:
+        return redirect(url_for('admin_login'))
+    return render_template('admin_dashboard.html', username=session['admin'], projects=projects, users=users, enrollments=enrollments)
+
+@app.route('/admin/create-project', methods=['GET', 'POST'])
+def admin_create_project():
+    if 'admin' not in session:
+        return redirect(url_for('admin_login'))
+        
+    if request.method == 'POST':
+        title = request.form['title']
+        problem_statement = request.form['problem_statement']
+        solution_overview = request.form['solution_overview']
+        
+        # Handle File Uploads
+        image = request.files['image']
+        document = request.files['document']
+        
+        image_filename = None
+        doc_filename = None
+
+        if image:
+            image_filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+            
+        if document:
+            doc_filename = secure_filename(document.filename)
+            document.save(os.path.join(app.config['UPLOAD_FOLDER'], doc_filename))
+            
+        # Create Project ID (simple auto-increment)
+        project_id = len(projects) + 1
+        
+        new_project = {
+            'id': project_id,
+            'title': title,
+            'problem_statement': problem_statement,
+            'solution_overview': solution_overview,
+            'image': image_filename,
+            'document': doc_filename
+        }
+        
+        projects.append(new_project)
+        return redirect(url_for('admin_dashboard'))
+        
+    return render_template('admin_create_project.html', username=session['admin'])
 
 @app.route('/admin/logout')
 def admin_logout():

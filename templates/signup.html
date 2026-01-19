@@ -4,13 +4,25 @@
 
 {% block content %}
 <div class="container">
-    <h2>Student Signup</h2>
-    <form action="{{ url_for('signup') }}" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Signup</button>
-    </form>
-    <p style="margin-top: 1rem;">Already have an account? <a href="{{ url_for('login') }}"
-            style="color: var(--primary-color);">Login here</a>.</p>
+    <div class="form-container">
+        <h2 class="text-center mb-4">Student Signup</h2>
+        <form action="{{ url_for('signup') }}" method="POST">
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Choose a username"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control"
+                    placeholder="Choose a password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Signup</button>
+        </form>
+        <p class="mt-4 text-center">Already have an account? <a href="{{ url_for('login') }}"
+                style="color: var(--primary-color);">Login here</a>.</p>
+    </div>
 </div>
 {% endblock %}
