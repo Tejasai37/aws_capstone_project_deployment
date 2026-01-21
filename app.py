@@ -19,8 +19,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # In-memory database (dictionary)
 users = {}
 admin_users = {}
-projects = []  # List of dictionaries: {'id': 1, 'title': '...', 'desc': '...', 'image': '...', 'doc': '...'}
-enrollments = {} # Dictionary: {'username': [project_id_1, project_id_2]}
+projects = []  
+enrollments = {} 
 
 @app.route('/')
 def index():
@@ -63,7 +63,6 @@ def home():
         username = session['username']
         user_enrollments_ids = enrollments.get(username, [])
         
-        # Filter projects to get full details of enrolled ones
         my_projects = [p for p in projects if p['id'] in user_enrollments_ids]
         
         return render_template('home.html', username=username, my_projects=my_projects)
