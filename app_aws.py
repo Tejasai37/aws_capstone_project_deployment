@@ -23,7 +23,7 @@ projects_table = dynamodb.Table('Projects')
 enrollments_table = dynamodb.Table('Enrollments')
 
 # SNS Topic ARN (Replace with your actual SNS Topic ARN)
-SNS_TOPIC_ARN = 'paste-your-sns-topic-arn-here' 
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:604665149129:aws_capstone_topic' 
 
 # Configuration for File Uploads
 UPLOAD_FOLDER = 'static/uploads'
