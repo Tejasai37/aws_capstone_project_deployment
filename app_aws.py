@@ -23,7 +23,7 @@ projects_table = dynamodb.Table('Projects')
 enrollments_table = dynamodb.Table('Enrollments')
 
 # SNS Topic ARN (Replace with your actual SNS Topic ARN)
-SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:123456789012:MyAppNotifications' # PASTE YOUR SNS TOPIC ARN HERE
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:604665149129:aws_capstone' 
 
 # Configuration for File Uploads
 UPLOAD_FOLDER = 'static/uploads'
