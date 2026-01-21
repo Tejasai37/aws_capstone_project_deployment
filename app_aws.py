@@ -22,7 +22,7 @@ admin_users_table = dynamodb.Table('AdminUsers')
 projects_table = dynamodb.Table('Projects')
 enrollments_table = dynamodb.Table('Enrollments')
 
-# SNS Topic ARN (Replace with your actual SNS Topic ARN or set as Env Var)
+# SNS Topic ARN (Replace with your actual SNS Topic ARN)
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:123456789012:MyAppNotifications' # PASTE YOUR SNS TOPIC ARN HERE
 
 # Configuration for File Uploads
@@ -96,12 +96,9 @@ def home():
         response = enrollments_table.get_item(Key={'username': username})
         user_enrollments_ids = response.get('Item', {}).get('project_ids', [])
         
-        # Get all projects needed (inefficient for many projects, but simple for demo)
+        # Get all projects needed
         my_projects = []
         if user_enrollments_ids:
-             # Batch get item is better, but doing scan/filter for simplicity or individual gets
-             # For a small capstone, scanning projects and filtering in python is okay, OR
-             # looping gets. Let's Loop gets since we have IDs.
             for pid in user_enrollments_ids:
                  p_res = projects_table.get_item(Key={'id': pid})
                  if 'Item' in p_res:
@@ -124,9 +121,6 @@ def projects_list():
     # Scan all projects
     res_projects = projects_table.scan()
     projects = res_projects.get('Items', [])
-    
-    # Sort by ID if needed, though they are UUIDs now. 
-    # If integer IDs are preferred for sorting we'd need a different scheme, but UUID is standard for cloud.
     
     return render_template('projects_list.html', projects=projects, user_enrollments=user_enrollments_ids)
 
@@ -193,8 +187,6 @@ def admin_dashboard():
     projects = projects_table.scan().get('Items', [])
     enrollments = enrollments_table.scan().get('Items', []) # This returns list of dicts {'username':..., 'project_ids':...}
     
-    # Convert enrollments list to dict structure for template compatibility if needed
-    # Template expects: enrollments = {'username': [ids]}
     enrollments_dict = {item['username']: item['project_ids'] for item in enrollments}
     
     # Convert users list to dict
@@ -252,5 +244,4 @@ def admin_logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # Bind to 0.0.0.0 to be accessible externally on EC2
     app.run(host='0.0.0.0', port=5000, debug=True)
