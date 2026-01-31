@@ -16,16 +16,16 @@ REGION = 'us-east-1'
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 sns = boto3.client('sns', region_name=REGION)
 
-# DynamoDB Tables (Create these tables in DynamoDB manually)
+# DynamoDB Tables
 users_table = dynamodb.Table('Users')
 admin_users_table = dynamodb.Table('AdminUsers')
 projects_table = dynamodb.Table('Projects')
 enrollments_table = dynamodb.Table('Enrollments')
 
-# SNS Topic ARN (Replace with your actual SNS Topic ARN)
+# SNS Topic ARN
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:604665149129:aws_capstone_topic' 
 
-# Configuration for File Uploads
+# File Upload Config
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 

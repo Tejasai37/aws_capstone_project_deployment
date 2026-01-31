@@ -1,7 +1,3 @@
-# Hello I am Teja this is a sample templete code for AWS Capstone project
-# Hello again
-# I am testing git push and pull
-
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
 from werkzeug.utils import secure_filename
